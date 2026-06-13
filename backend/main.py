@@ -50,6 +50,16 @@ app.add_middleware(
 # Secret passphrase to secure webhooks from TradingView
 WEBHOOK_PASSPHRASE = "super_secret_trading_passphrase"
 
+@app.get("/")
+def read_root():
+    return {
+        "message": "TradingBot Pro backend is running.",
+        "strategy": "EMA Momentum Pullback",
+        "docs": "/docs",
+        "status": "online",
+        "ibkr_connected": ibkr.connected
+    }
+
 @app.post("/webhook")
 async def tradingview_webhook(payload: WebhookPayload, db: Session = Depends(get_db)):
     """
@@ -101,11 +111,23 @@ def get_screener_results(capital: float = 1000.0):
     return {"results": results}
 
 @app.get("/api/backtest")
-def run_backtest_endpoint(capital: float = 100.0):
+def run_backtest_endpoint(capital: float = 1000.0):
     import backtester
-    # This might take 10-15 seconds as it downloads 4 years of data
-    results = backtester.run_backtest(initial_capital=capital, start_date="2020-01-01")
-    return results
+    # This might take 10-15 seconds as it downloads 4+ years of data
+    result = backtester.run_backtest(initial_capital=capital, start_date="2020-01-01")
+    return result  # Returns {"trades": [...], "metrics": {...}}
+
+@app.get("/api/status")
+def get_status():
+    return {
+        "status": "online",
+        "ibkr_connected": ibkr.connected,
+        "strategy": "EMA Momentum Pullback",
+        "risk_per_trade": "Adaptive (2-5%)",
+        "max_positions": "1-3 (by capital)",
+        "stop_type": "ATR Trailing Stop (2x) + Breakeven (Momentum-Aware)",
+        "commission": "IBKR Tiered ($0.35 min)",
+    }
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
