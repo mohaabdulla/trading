@@ -1,0 +1,114 @@
+{
+    "SOFI": {
+        "compliant": false,
+        "reason": "Prohibited industry: credit services / financial services"
+    },
+    "PLTR": {
+        "compliant": false,
+        "reason": "Interest income ratio 5.1% >= 5%"
+    },
+    "HOOD": {
+        "compliant": false,
+        "reason": "Prohibited industry: capital markets / financial services"
+    },
+    "SNAP": {
+        "compliant": false,
+        "reason": "Debt ratio 47.5% >= 33%"
+    },
+    "PINS": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "DKNG": {
+        "compliant": false,
+        "reason": "Prohibited industry: gambling / consumer cyclical"
+    },
+    "U": {
+        "compliant": false,
+        "reason": "Interest income ratio 5.8% >= 5%"
+    },
+    "F": {
+        "compliant": false,
+        "reason": "Debt ratio 280.3% >= 33%"
+    },
+    "RIVN": {
+        "compliant": false,
+        "reason": "Interest income ratio 5.4% >= 5%"
+    },
+    "LCID": {
+        "compliant": false,
+        "reason": "Debt ratio 157.5% >= 33%"
+    },
+    "NIO": {
+        "compliant": false,
+        "reason": "Debt ratio 239.5% >= 33%"
+    },
+    "PLUG": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "FCEL": {
+        "compliant": false,
+        "reason": "Interest income ratio 5.3% >= 5%"
+    },
+    "MARA": {
+        "compliant": false,
+        "reason": "Prohibited industry: capital markets / financial services"
+    },
+    "RIOT": {
+        "compliant": false,
+        "reason": "Prohibited industry: capital markets / financial services"
+    },
+    "COIN": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "CCL": {
+        "compliant": false,
+        "reason": "Debt ratio 69.3% >= 33%"
+    },
+    "AAL": {
+        "compliant": false,
+        "reason": "Debt ratio 372.3% >= 33%"
+    },
+    "DAL": {
+        "compliant": false,
+        "reason": "Debt ratio 37.2% >= 33%"
+    },
+    "NCLH": {
+        "compliant": false,
+        "reason": "Debt ratio 163.7% >= 33%"
+    },
+    "DNA": {
+        "compliant": false,
+        "reason": "Debt ratio 85.3% >= 33%"
+    },
+    "CRSP": {
+        "compliant": false,
+        "reason": "Liquidity ratio 40.3% >= 33%"
+    },
+    "BEAM": {
+        "compliant": false,
+        "reason": "Liquidity ratio 41.7% >= 33%"
+    },
+    "AMD": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "INTC": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "CSCO": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "T": {
+        "compliant": false,
+        "reason": "Debt ratio 94.6% >= 33%"
+    },
+    "UBER": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    }
+}

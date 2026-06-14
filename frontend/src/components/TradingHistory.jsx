@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { History, TrendingUp, TrendingDown, DollarSign, Clock, Play, Award, Target, BarChart3, Timer, ArrowDownRight } from 'lucide-react'
+import { History, TrendingUp, TrendingDown, DollarSign, Clock, Play, Award, Target, BarChart3, Timer, ArrowDownRight, AlertTriangle, Zap } from 'lucide-react'
 
 const API_BASE = 'http://localhost:8000'
 
@@ -9,6 +9,8 @@ const TradingHistory = ({ capital }) => {
   const [metrics, setMetrics] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isBacktest, setIsBacktest] = useState(false)
+  const [useTimeStop, setUseTimeStop] = useState(true)
+  const [zeroCommission, setZeroCommission] = useState(false)
 
   const fetchLiveHistory = async () => {
     setLoading(true)
@@ -29,14 +31,17 @@ const TradingHistory = ({ capital }) => {
     setLoading(true)
     setIsBacktest(true)
     try {
-      const response = await axios.get(`${API_BASE}/api/backtest?capital=${capital}`)
+      const params = new URLSearchParams({
+        capital: capital,
+        use_time_stop: useTimeStop,
+        zero_commission: zeroCommission,
+      })
+      const response = await axios.get(`${API_BASE}/api/backtest?${params}`)
       const data = response.data
-      // New format: { trades: [...], metrics: {...} }
       if (data.trades) {
         setTrades(data.trades)
         setMetrics(data.metrics)
       } else {
-        // Fallback for old format (flat array)
         setTrades(Array.isArray(data) ? data : [])
         setMetrics(null)
       }
@@ -51,7 +56,6 @@ const TradingHistory = ({ capital }) => {
     fetchLiveHistory()
   }, [])
 
-  // Calculate totals from trade data
   const totalRealizedGain = trades.reduce((sum, t) => sum + (t.realized_pnl || 0), 0)
   const totalCommissions = trades.reduce((sum, t) => sum + (t.commission || 0), 0)
   const netProfit = totalRealizedGain - totalCommissions
@@ -61,87 +65,143 @@ const TradingHistory = ({ capital }) => {
 
       {/* Performance Metrics Cards (shown after backtest) */}
       {metrics && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-          
-          <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-              <span>Total Return</span>
-              <TrendingUp size={16} color={metrics.total_return_pct >= 0 ? "var(--success)" : "var(--danger)"} />
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+            
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Total Return</span>
+                <TrendingUp size={16} color={metrics.total_return_pct >= 0 ? "var(--success)" : "var(--danger)"} />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.total_return_pct >= 0 ? 'var(--success)' : 'var(--danger)' }}>
+                {metrics.total_return_pct >= 0 ? '+' : ''}{metrics.total_return_pct}%
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                ${metrics.initial_capital} → ${metrics.final_value}
+              </div>
             </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.total_return_pct >= 0 ? 'var(--success)' : 'var(--danger)' }}>
-              {metrics.total_return_pct >= 0 ? '+' : ''}{metrics.total_return_pct}%
+
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Win Rate</span>
+                <Award size={16} color="var(--accent-blue)" />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.win_rate >= 50 ? 'var(--success)' : 'var(--danger)' }}>
+                {metrics.win_rate}%
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                {metrics.wins}W / {metrics.losses}L of {metrics.closed_trades} closed
+              </div>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-              ${metrics.initial_capital} → ${metrics.final_value}
+
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Profit Factor</span>
+                <Target size={16} color="var(--accent-purple)" />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.profit_factor >= 1 ? 'var(--success)' : 'var(--danger)' }}>
+                {metrics.profit_factor === Infinity ? '∞' : metrics.profit_factor}
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Avg Win: ${metrics.avg_win} | Avg Loss: ${metrics.avg_loss}
+              </div>
             </div>
+
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Max Drawdown</span>
+                <ArrowDownRight size={16} color="var(--danger)" />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--danger)' }}>
+                -{metrics.max_drawdown_pct}%
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Largest peak-to-trough decline
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Expectancy</span>
+                <Zap size={16} color={metrics.expectancy >= 0 ? "var(--success)" : "var(--danger)"} />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.expectancy >= 0 ? 'var(--success)' : 'var(--danger)' }}>
+                ${metrics.expectancy}
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Per trade (after costs)
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Commission Drag</span>
+                <DollarSign size={16} color={metrics.commission_drag_pct > 50 ? "var(--danger)" : "var(--accent-blue)"} />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.commission_drag_pct > 50 ? 'var(--danger)' : 'var(--text-primary)' }}>
+                {metrics.commission_drag_pct}%
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Of gross profits → fees
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Avg Hold Time</span>
+                <Timer size={16} color="var(--accent-blue)" />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>
+                {metrics.avg_hold_days}d
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                {metrics.total_trades} total trades
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                <span>Net Profit</span>
+                <DollarSign size={16} color={metrics.net_profit >= 0 ? "var(--success)" : "var(--danger)"} />
+              </div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.net_profit >= 0 ? 'var(--success)' : 'var(--danger)' }}>
+                ${metrics.net_profit}
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Commissions: -${metrics.total_commissions}
+              </div>
+            </div>
+
           </div>
 
-          <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-              <span>Win Rate</span>
-              <Award size={16} color="var(--accent-blue)" />
+          {/* Warnings */}
+          {(metrics.expectancy < 0 || metrics.commission_drag_pct > 50) && (
+            <div className="glass-panel" style={{ 
+              background: 'rgba(239, 68, 68, 0.08)', 
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '0.75rem' 
+            }}>
+              <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--danger)' }}>
+                <AlertTriangle size={20} />
+                Strategy Warnings
+              </h3>
+              {metrics.expectancy < 0 && (
+                <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  ⚠️ <strong>Negative Expectancy:</strong> The strategy loses ${Math.abs(metrics.expectancy)} per trade on average after costs. 
+                  This means the edge is not sufficient to overcome trading expenses at this account size.
+                </p>
+              )}
+              {metrics.commission_drag_pct > 50 && (
+                <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  💸 <strong>Commission Drag:</strong> {metrics.commission_drag_pct}% of gross profits are consumed by broker fees. 
+                  {!zeroCommission && ' Try enabling "Zero Commission" mode to see if the strategy has edge without costs.'}
+                </p>
+              )}
             </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.win_rate >= 50 ? 'var(--success)' : 'var(--danger)' }}>
-              {metrics.win_rate}%
-            </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-              {metrics.wins}W / {metrics.losses}L of {metrics.closed_trades} closed
-            </div>
-          </div>
-
-          <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-              <span>Profit Factor</span>
-              <Target size={16} color="var(--accent-purple)" />
-            </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.profit_factor >= 1 ? 'var(--success)' : 'var(--danger)' }}>
-              {metrics.profit_factor === Infinity ? '∞' : metrics.profit_factor}
-            </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-              Avg Win: ${metrics.avg_win} | Avg Loss: ${metrics.avg_loss}
-            </div>
-          </div>
-
-          <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-              <span>Max Drawdown</span>
-              <ArrowDownRight size={16} color="var(--danger)" />
-            </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--danger)' }}>
-              -{metrics.max_drawdown_pct}%
-            </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-              Largest peak-to-trough decline
-            </div>
-          </div>
-
-          <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-              <span>Avg Hold Time</span>
-              <Timer size={16} color="var(--accent-blue)" />
-            </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>
-              {metrics.avg_hold_days}d
-            </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-              {metrics.total_trades} total trades
-            </div>
-          </div>
-
-          <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-              <span>Net Profit</span>
-              <DollarSign size={16} color={metrics.net_profit >= 0 ? "var(--success)" : "var(--danger)"} />
-            </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: metrics.net_profit >= 0 ? 'var(--success)' : 'var(--danger)' }}>
-              ${metrics.net_profit}
-            </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-              Commissions: -${metrics.total_commissions}
-            </div>
-          </div>
-
-        </div>
+          )}
+        </>
       )}
 
       {/* Simple summary when no backtest metrics */}
@@ -173,12 +233,50 @@ const TradingHistory = ({ capital }) => {
 
       {/* Trade History Table */}
       <div className="glass-panel">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <h2 style={{ margin: '0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <History size={24} color="var(--accent-blue)" />
             {isBacktest ? `Backtest Results (2020–Today, $${capital})` : "Live Trade History"}
           </h2>
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+
+            {/* Toggle Controls */}
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <label style={{ 
+                display: 'flex', alignItems: 'center', gap: '0.5rem', 
+                cursor: 'pointer', fontSize: '0.85rem', color: 'var(--text-secondary)',
+                padding: '0.4rem 0.75rem', borderRadius: '6px',
+                background: useTimeStop ? 'rgba(59, 130, 246, 0.15)' : 'rgba(255,255,255,0.05)',
+                border: useTimeStop ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid rgba(255,255,255,0.1)',
+                transition: 'all 0.2s ease',
+              }}>
+                <input 
+                  type="checkbox" 
+                  checked={useTimeStop} 
+                  onChange={(e) => setUseTimeStop(e.target.checked)}
+                  style={{ accentColor: 'var(--accent-blue)' }}
+                />
+                <span>3-Day Time Stop</span>
+              </label>
+
+              <label style={{ 
+                display: 'flex', alignItems: 'center', gap: '0.5rem', 
+                cursor: 'pointer', fontSize: '0.85rem', color: 'var(--text-secondary)',
+                padding: '0.4rem 0.75rem', borderRadius: '6px',
+                background: zeroCommission ? 'rgba(34, 197, 94, 0.15)' : 'rgba(255,255,255,0.05)',
+                border: zeroCommission ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(255,255,255,0.1)',
+                transition: 'all 0.2s ease',
+              }}>
+                <input 
+                  type="checkbox" 
+                  checked={zeroCommission} 
+                  onChange={(e) => setZeroCommission(e.target.checked)}
+                  style={{ accentColor: 'var(--success)' }}
+                />
+                <span>Zero Commission</span>
+              </label>
+            </div>
+
             <button className="btn" onClick={fetchLiveHistory} disabled={loading} style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', boxShadow: 'none' }}>
               View Live History
             </button>
@@ -238,8 +336,8 @@ const TradingHistory = ({ capital }) => {
                       <div>{trade.quantity} shares</div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>@ ${trade.price?.toFixed(2)}</div>
                     </td>
-                    <td style={{ padding: '1rem 0', color: 'var(--danger)' }}>
-                      ${trade.commission ? trade.commission.toFixed(2) : '0.00'}
+                    <td style={{ padding: '1rem 0', color: trade.commission > 0 ? 'var(--danger)' : 'var(--success)' }}>
+                      {trade.commission > 0 ? `$${trade.commission.toFixed(2)}` : 'Free'}
                     </td>
                     {isBacktest && (
                       <td style={{ padding: '1rem 0' }}>

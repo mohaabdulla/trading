@@ -111,10 +111,16 @@ def get_screener_results(capital: float = 1000.0):
     return {"results": results}
 
 @app.get("/api/backtest")
-def run_backtest_endpoint(capital: float = 1000.0):
+def run_backtest_endpoint(capital: float = 1000.0, use_time_stop: bool = True,
+                          zero_commission: bool = False):
     import backtester
     # This might take 10-15 seconds as it downloads 4+ years of data
-    result = backtester.run_backtest(initial_capital=capital, start_date="2020-01-01")
+    result = backtester.run_backtest(
+        initial_capital=capital,
+        start_date="2020-01-01",
+        use_time_stop=use_time_stop,
+        zero_commission=zero_commission,
+    )
     return result  # Returns {"trades": [...], "metrics": {...}}
 
 @app.get("/api/status")
