@@ -20,12 +20,12 @@ else:
     print(f"Warning: {cache_path} not found. Run halal_screener.py first.")
 
 # Risk Management
-RISK_PCT = 0.02              # Reverted to 2% (true fixed fractional risk)
+RISK_PCT = 0.04              # Increased to 4% for higher total return
 MAX_EXPOSURE_PCT = 1.0       # Max total account exposure
 MIN_TRADE_VALUE = 0.0        # Removed minimum trade value to allow small position sizing
 
 # Stop Loss & Exits
-ATR_STOP_MULTIPLIER = 1.2    # Tighter stop (1.2x ATR)
+ATR_STOP_MULTIPLIER = 1.8    # Wider stop (1.8x ATR) for higher win rate
 ATR_TARGET_MULTIPLIER = 4.0  # Fixed Risk/Reward target (4x ATR)
 MAX_HOLD_DAYS = 15           # Hold longer (15 days) to reach targets
 RSI_OVERBOUGHT = 75          # Take profit if RSI > 75
@@ -35,7 +35,7 @@ MIN_PRICE = 1.0              # Penny stock filter
 MAX_PRICE = 300.0            # Increased max price to include more liquid names
 MIN_AVG_VOL = 500_000        # Minimum 20-day average volume
 VOL_SURGE_MULTIPLIER = 1.2   # Current vol >= 1.2x avg vol (Breakout volume)
-RSI_LOWER = 65               # Breakout zone lower bound
+RSI_LOWER = 70               # Breakout zone lower bound
 RSI_UPPER = 85               # Breakout zone upper bound
 MIN_VOLATILITY_PCT = 0.02    # Require at least 2% daily ATR
 
