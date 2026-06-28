@@ -256,7 +256,7 @@ const TradingHistory = ({ capital }) => {
                   onChange={(e) => setUseTimeStop(e.target.checked)}
                   style={{ accentColor: 'var(--accent-blue)' }}
                 />
-                <span>3-Day Time Stop</span>
+                <span>10-Day Time Stop</span>
               </label>
 
               <label style={{ 

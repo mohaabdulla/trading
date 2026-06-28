@@ -20,14 +20,19 @@ This project contains a trading bot backend that connects to Interactive Brokers
    ```bash
    uvicorn main:app --host 0.0.0.0 --port 8000 --reload
    ```
+   *(Note: The `--reload` flag ensures that the server automatically updates and restarts every time you save changes to the Python code!)*
 
 ## Running the Frontend Dashboard
 1. Open a terminal and navigate to `frontend/`.
-2. Start the Vite dev server:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the Vite dev server:
    ```bash
    npm run dev
    ```
-3. Open `http://localhost:5173` in your browser.
+4. Open `http://localhost:5173` in your browser.
 
 ## Connecting to TradingView
 1. In TradingView, set up your Pine Script alerts.

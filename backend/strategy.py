@@ -27,7 +27,7 @@ MIN_TRADE_VALUE = 0.0        # Removed minimum trade value to allow small positi
 # Stop Loss & Exits
 ATR_STOP_MULTIPLIER = 1.8    # Wider stop (1.8x ATR) for higher win rate
 ATR_TARGET_MULTIPLIER = 4.0  # Fixed Risk/Reward target (4x ATR)
-MAX_HOLD_DAYS = 15           # Hold longer (15 days) to reach targets
+MAX_HOLD_DAYS = 10           # Hold for 10 days to maximize total return
 RSI_OVERBOUGHT = 75          # Take profit if RSI > 75
 
 # Entry Filters
