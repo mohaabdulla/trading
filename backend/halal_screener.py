@@ -6,8 +6,10 @@ import time
 CACHE_FILE = "halal_universe.json"
 
 PROHIBITED_INDUSTRIES = [
-    "bank", "credit", "insurance", "capital markets", # Conventional Finance
-    "tobacco", "gambling", "casino", "beverages - wineries", "aerospace & defense" # Haram activities
+    "bank", "credit", "insurance", "capital markets", "financial", "exchange", # Conventional Finance
+    "tobacco", "gambling", "casino", "beverages - wineries", "aerospace & defense", "defense",
+    "crypto", "bitcoin", "blockchain", "adult", "alcohol", "pork", "weapon",
+    "broadcasting", "entertainment", "media", "cinema", "hotel", "music"
 ]
 
 def is_halal_business(info):
@@ -21,6 +23,11 @@ def is_halal_business(info):
         if prohibited in industry or prohibited in sector:
             return False, f"Prohibited industry: {industry} / {sector}"
             
+    # Ultra strict hardcoded checks for known tricky ones like Coinbase
+    symbol = info.get("symbol", "").upper()
+    if symbol == "COIN":
+        return False, "Prohibited industry: cryptocurrency exchange / margin lending"
+
     return True, "Passed business screen"
 
 def get_financial_value(df, key):
@@ -45,20 +52,20 @@ def is_halal_financials(ticker_obj, info):
     if bs.empty or fin.empty:
         return False, "Missing financial statements"
         
-    # 1. Debt Ratio
+    # 1. Debt Ratio (Ultra-Strict 30%)
     total_debt = get_financial_value(bs, "Total Debt")
     debt_ratio = total_debt / market_cap
-    if debt_ratio >= 0.33:
-        return False, f"Debt ratio {debt_ratio:.1%} >= 33%"
+    if debt_ratio >= 0.30:
+        return False, f"Debt ratio {debt_ratio:.1%} >= 30%"
         
-    # 2. Liquidity Ratio (Cash + Short Term Investments)
+    # 2. Liquidity Ratio (Ultra-Strict 30%)
     cash = get_financial_value(bs, "Cash And Cash Equivalents")
     st_investments = get_financial_value(bs, "Other Short Term Investments")
     liquidity_ratio = (cash + st_investments) / market_cap
-    if liquidity_ratio >= 0.33:
-        return False, f"Liquidity ratio {liquidity_ratio:.1%} >= 33%"
+    if liquidity_ratio >= 0.30:
+        return False, f"Liquidity ratio {liquidity_ratio:.1%} >= 30%"
         
-    # 3. Income Ratio
+    # 3. Income Ratio (Strict 5%)
     revenue = get_financial_value(fin, "Total Revenue")
     interest_income = get_financial_value(fin, "Interest Income")
     
@@ -103,7 +110,7 @@ def build_halal_universe(tickers, force_refresh=False):
         time.sleep(0.5) # Be gentle to Yahoo Finance API
         
     with open(CACHE_FILE, "w") as f:
-        json.write(f, results, indent=4)
+        json.dump(results, f, indent=4)
         
     return results
 

@@ -1,0 +1,30 @@
+{
+    "PINS": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "PLUG": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "COIN": {
+        "compliant": false,
+        "reason": "Prohibited industry: financial data & stock exchanges / financial services"
+    },
+    "AMD": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "INTC": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "CSCO": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    },
+    "UBER": {
+        "compliant": true,
+        "reason": "Fully compliant"
+    }
+}

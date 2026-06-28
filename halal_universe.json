@@ -13,7 +13,7 @@
     },
     "SNAP": {
         "compliant": false,
-        "reason": "Debt ratio 47.5% >= 33%"
+        "reason": "Debt ratio 56.7% >= 30%"
     },
     "PINS": {
         "compliant": true,
@@ -29,19 +29,19 @@
     },
     "F": {
         "compliant": false,
-        "reason": "Debt ratio 280.3% >= 33%"
+        "reason": "Debt ratio 294.4% >= 30%"
     },
     "RIVN": {
         "compliant": false,
-        "reason": "Interest income ratio 5.4% >= 5%"
+        "reason": "Debt ratio 31.7% >= 30%"
     },
     "LCID": {
         "compliant": false,
-        "reason": "Debt ratio 157.5% >= 33%"
+        "reason": "Debt ratio 138.4% >= 30%"
     },
     "NIO": {
         "compliant": false,
-        "reason": "Debt ratio 239.5% >= 33%"
+        "reason": "Debt ratio 256.7% >= 30%"
     },
     "PLUG": {
         "compliant": true,
@@ -60,36 +60,36 @@
         "reason": "Prohibited industry: capital markets / financial services"
     },
     "COIN": {
-        "compliant": true,
-        "reason": "Fully compliant"
+        "compliant": false,
+        "reason": "Prohibited industry: financial data & stock exchanges / financial services"
     },
     "CCL": {
         "compliant": false,
-        "reason": "Debt ratio 69.3% >= 33%"
+        "reason": "Debt ratio 63.4% >= 30%"
     },
     "AAL": {
         "compliant": false,
-        "reason": "Debt ratio 372.3% >= 33%"
+        "reason": "Debt ratio 312.1% >= 30%"
     },
     "DAL": {
         "compliant": false,
-        "reason": "Debt ratio 37.2% >= 33%"
+        "reason": "Debt ratio 33.3% >= 30%"
     },
     "NCLH": {
         "compliant": false,
-        "reason": "Debt ratio 163.7% >= 33%"
+        "reason": "Debt ratio 149.8% >= 30%"
     },
     "DNA": {
         "compliant": false,
-        "reason": "Debt ratio 85.3% >= 33%"
+        "reason": "Debt ratio 65.7% >= 30%"
     },
     "CRSP": {
         "compliant": false,
-        "reason": "Liquidity ratio 40.3% >= 33%"
+        "reason": "Liquidity ratio 36.5% >= 30%"
     },
     "BEAM": {
         "compliant": false,
-        "reason": "Liquidity ratio 41.7% >= 33%"
+        "reason": "Liquidity ratio 34.8% >= 30%"
     },
     "AMD": {
         "compliant": true,
@@ -105,7 +105,7 @@
     },
     "T": {
         "compliant": false,
-        "reason": "Debt ratio 94.6% >= 33%"
+        "reason": "Debt ratio 98.2% >= 30%"
     },
     "UBER": {
         "compliant": true,
