@@ -5,10 +5,10 @@ import contextlib
 import itertools
 import time
 
-max_holds = [10, 12, 15]
-targets = [4.0, 5.0]
-stops = [1.8, 2.0]
-risks = [0.04, 0.05]
+max_holds = [10]
+targets = [4.0]
+stops = [2.0]
+risks = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10]
 
 combinations = list(itertools.product(max_holds, targets, stops, risks))
 print(f"Testing {len(combinations)} combinations...")

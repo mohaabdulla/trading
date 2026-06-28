@@ -20,7 +20,7 @@ else:
     print(f"Warning: {cache_path} not found. Run halal_screener.py first.")
 
 # Risk Management
-RISK_PCT = 0.05              # Increased to 5% for higher total return (> 150%)
+RISK_PCT = 0.07              # Increased to 7% (optimal point for max total return of 363%)
 MAX_EXPOSURE_PCT = 1.0       # Max total account exposure
 MIN_TRADE_VALUE = 0.0        # Removed minimum trade value to allow small position sizing
 
