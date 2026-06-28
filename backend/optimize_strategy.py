@@ -6,9 +6,9 @@ import itertools
 import time
 
 max_holds = [10]
-targets = [4.0]
-stops = [2.0]
-risks = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10]
+targets = [3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5]
+stops = [1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3]
+risks = [0.07]
 
 combinations = list(itertools.product(max_holds, targets, stops, risks))
 print(f"Testing {len(combinations)} combinations...")

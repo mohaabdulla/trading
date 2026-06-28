@@ -25,8 +25,8 @@ MAX_EXPOSURE_PCT = 1.0       # Max total account exposure
 MIN_TRADE_VALUE = 0.0        # Removed minimum trade value to allow small position sizing
 
 # Stop Loss & Exits
-ATR_STOP_MULTIPLIER = 2.0    # Wider stop (2.0x ATR) to lower max drawdown while capturing massive returns
-ATR_TARGET_MULTIPLIER = 4.0  # Fixed Risk/Reward target (4x ATR)
+ATR_STOP_MULTIPLIER = 1.9    # Optimal stop (1.9x ATR) for highest total return and tight drawdown
+ATR_TARGET_MULTIPLIER = 3.9  # Optimal Target (3.9x ATR) to capture full moves before exhaustion
 MAX_HOLD_DAYS = 10           # Hold for 10 days to maximize total return
 RSI_OVERBOUGHT = 75          # Take profit if RSI > 75
 
