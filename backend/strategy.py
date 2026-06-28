@@ -20,12 +20,12 @@ else:
     print(f"Warning: {cache_path} not found. Run halal_screener.py first.")
 
 # Risk Management
-RISK_PCT = 0.04              # Increased to 4% for higher total return
+RISK_PCT = 0.05              # Increased to 5% for higher total return (> 150%)
 MAX_EXPOSURE_PCT = 1.0       # Max total account exposure
 MIN_TRADE_VALUE = 0.0        # Removed minimum trade value to allow small position sizing
 
 # Stop Loss & Exits
-ATR_STOP_MULTIPLIER = 1.8    # Wider stop (1.8x ATR) for higher win rate
+ATR_STOP_MULTIPLIER = 2.0    # Wider stop (2.0x ATR) to lower max drawdown while capturing massive returns
 ATR_TARGET_MULTIPLIER = 4.0  # Fixed Risk/Reward target (4x ATR)
 MAX_HOLD_DAYS = 10           # Hold for 10 days to maximize total return
 RSI_OVERBOUGHT = 75          # Take profit if RSI > 75
