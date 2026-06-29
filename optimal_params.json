@@ -1,0 +1,154 @@
+{
+    "PINS": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 70,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "PLUG": {
+        "ATR_STOP_MULTIPLIER": 1.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "AMD": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "CSCO": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "UBER": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 70,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "NVDA": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 6.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "AAPL": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "TSM": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 5.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 70,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "AVGO": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 70,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "TSLA": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "MU": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "LLY": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "ASML": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "V": {
+        "ATR_STOP_MULTIPLIER": 2.0,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 70,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "XOM": {
+        "ATR_STOP_MULTIPLIER": 1.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "JNJ": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "LRCX": {
+        "ATR_STOP_MULTIPLIER": 2.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "AMAT": {
+        "ATR_STOP_MULTIPLIER": 1.5,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 70,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    },
+    "MA": {
+        "ATR_STOP_MULTIPLIER": 2.0,
+        "ATR_TARGET_MULTIPLIER": 4.0,
+        "MAX_HOLD_DAYS": 12,
+        "RSI_OVERBOUGHT": 75,
+        "VOL_SURGE_MULTIPLIER": 1.2,
+        "MIN_VOLATILITY_PCT": 0.01
+    }
+}

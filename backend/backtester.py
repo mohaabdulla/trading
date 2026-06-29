@@ -6,7 +6,7 @@ from strategy import (
     TICKERS, ATR_STOP_MULTIPLIER, ATR_TARGET_MULTIPLIER, RISK_PCT, MIN_TRADE_VALUE, 
     MAX_HOLD_DAYS, RSI_OVERBOUGHT, MAX_COMMISSION_DRAG, MAX_EXPOSURE_PCT,
     COMMISSION_PER_SHARE, MIN_COMMISSION,
-    calculate_indicators, is_buy_signal
+    calculate_indicators, is_buy_signal, OPTIMAL_PARAMS
 )
 
 
@@ -177,8 +177,14 @@ def run_backtest(initial_capital: float = 100.0, start_date="2020-01-01",
                 if pos['entry_price'] > pos['trailing_stop']:
                     pos['trailing_stop'] = pos['entry_price']
 
+            p = OPTIMAL_PARAMS.get(ticker, {})
+            atr_stop_mult = p.get('ATR_STOP_MULTIPLIER', ATR_STOP_MULTIPLIER)
+            atr_target_mult = p.get('ATR_TARGET_MULTIPLIER', ATR_TARGET_MULTIPLIER)
+            max_hold_days = p.get('MAX_HOLD_DAYS', MAX_HOLD_DAYS)
+            rsi_overbought = p.get('RSI_OVERBOUGHT', RSI_OVERBOUGHT)
+
             # Update trailing stop (moves UP with high price, never down)
-            new_stop = high_price - (ATR_STOP_MULTIPLIER * atr_val)
+            new_stop = high_price - (atr_stop_mult * atr_val)
             if new_stop > pos['trailing_stop']:
                 pos['trailing_stop'] = new_stop
 
@@ -186,7 +192,7 @@ def run_backtest(initial_capital: float = 100.0, start_date="2020-01-01",
             exit_reason = None
             sell_price = current_price
             
-            target_price = pos['entry_price'] + (pos['atr_at_entry'] * ATR_TARGET_MULTIPLIER)
+            target_price = pos['entry_price'] + (pos['atr_at_entry'] * atr_target_mult)
 
             if high_price >= target_price:
                 exit_reason = "TARGET"
@@ -194,10 +200,10 @@ def run_backtest(initial_capital: float = 100.0, start_date="2020-01-01",
             elif current_price <= pos['trailing_stop']:
                 exit_reason = "STOP"
                 sell_price = current_price
-            elif rsi_val > RSI_OVERBOUGHT:
+            elif rsi_val > rsi_overbought:
                 exit_reason = "RSI_OB"
                 sell_price = current_price
-            elif use_time_stop and pos['days_held'] >= MAX_HOLD_DAYS:
+            elif use_time_stop and pos['days_held'] >= max_hold_days:
                 exit_reason = "TIME"
                 sell_price = current_price
 
@@ -251,11 +257,14 @@ def run_backtest(initial_capital: float = 100.0, start_date="2020-01-01",
                 if current_date not in df.index: continue
 
                 row = df.loc[current_date]
-                if is_buy_signal(row):
+                if is_buy_signal(row, ticker):
                     atr_val = float(row['ATRr_14'])
                     close_price = float(row['Close'])
                     
-                    stop_distance = atr_val * ATR_STOP_MULTIPLIER
+                    p = OPTIMAL_PARAMS.get(ticker, {})
+                    atr_stop_mult = p.get('ATR_STOP_MULTIPLIER', ATR_STOP_MULTIPLIER)
+                    
+                    stop_distance = atr_val * atr_stop_mult
                     suggested_shares = int(dollar_risk / stop_distance)
                     
                     if suggested_shares > 0:

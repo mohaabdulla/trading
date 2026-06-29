@@ -19,25 +19,32 @@ if os.path.exists(cache_path):
 else:
     print(f"Warning: {cache_path} not found. Run halal_screener.py first.")
 
-# Risk Management
-RISK_PCT = 0.08              # 8% risk per trade (optimized for max return while reducing drawdown)
+# Risk Management (Portfolio Level)
+RISK_PCT = 0.08              # Default risk per trade if not specified
 MAX_EXPOSURE_PCT = 1.0       # Max total account exposure
 MIN_TRADE_VALUE = 0.0        # Removed minimum trade value to allow small position sizing
 
-# Stop Loss & Exits
-ATR_STOP_MULTIPLIER = 2.5    # Wider stop to prevent shakeouts
-ATR_TARGET_MULTIPLIER = 6.0  # Higher target to capture larger trend moves
-MAX_HOLD_DAYS = 12           # Days to hold before time-based exit
-RSI_OVERBOUGHT = 70          # Take profit earlier on momentum exhaustion
+# Load Stock-Specific Optimal Parameters
+optimal_params_path = os.path.join(os.path.dirname(__file__), '..', 'optimal_params.json')
+OPTIMAL_PARAMS = {}
+if os.path.exists(optimal_params_path):
+    with open(optimal_params_path, 'r') as f:
+        OPTIMAL_PARAMS = json.load(f)
+
+# Default Stop Loss & Exits (Fallbacks)
+ATR_STOP_MULTIPLIER = 2.0
+ATR_TARGET_MULTIPLIER = 4.0
+MAX_HOLD_DAYS = 12
+RSI_OVERBOUGHT = 70
 
 # Entry Filters
 MIN_PRICE = 1.0              # Penny stock filter
-MAX_PRICE = 300.0            # Max price filter
+MAX_PRICE = 3000.0           # Max price filter (raised to allow LLY, AVGO, etc.)
 MIN_AVG_VOL = 500_000        # Minimum 20-day average volume
-VOL_SURGE_MULTIPLIER = 1.2   # Breakout volume confirmation (restored)
-RSI_LOWER = 68               # Breakout zone lower bound (restored — this IS the edge)
-RSI_UPPER = 85               # Breakout zone upper bound (restored)
-MIN_VOLATILITY_PCT = 0.015   # Allow slightly less volatile names to generate signals
+VOL_SURGE_MULTIPLIER = 1.2   # Default breakout volume confirmation
+RSI_LOWER = 68               # Default breakout zone lower bound
+RSI_UPPER = 85               # Default breakout zone upper bound
+MIN_VOLATILITY_PCT = 0.010   # Default minimum volatility
 
 # Commission Model (IBKR Tiered)
 COMMISSION_PER_SHARE = 0.0035
@@ -73,10 +80,10 @@ def calculate_indicators(df: pd.DataFrame) -> pd.DataFrame:
     df.dropna(subset=['EMA_20', 'EMA_50', 'EMA_200', 'MACD_12_26_9', 'RSI_14', 'ATRr_14', 'Vol_Avg'], inplace=True)
     return df
 
-def is_buy_signal(row: pd.Series) -> bool:
+def is_buy_signal(row: pd.Series, ticker: str = None) -> bool:
     """
     Unified entry logic used by both screener and backtester.
-    Evaluates a single day's data (row).
+    Evaluates a single day's data (row). Uses stock-specific params if available.
     """
     try:
         current_price = float(row['Close'])
@@ -88,6 +95,11 @@ def is_buy_signal(row: pd.Series) -> bool:
         atr_val = float(row['ATRr_14'])
         current_vol = float(row['Volume'])
         avg_vol = float(row['Vol_Avg'])
+        
+        # Load specific params or fallbacks
+        p = OPTIMAL_PARAMS.get(ticker, {}) if ticker else {}
+        vol_surge = p.get('VOL_SURGE_MULTIPLIER', VOL_SURGE_MULTIPLIER)
+        min_vol_pct = p.get('MIN_VOLATILITY_PCT', MIN_VOLATILITY_PCT)
         
         # 1. Price & Liquidity
         if not (MIN_PRICE <= current_price <= MAX_PRICE): return False
@@ -107,10 +119,10 @@ def is_buy_signal(row: pd.Series) -> bool:
         if macd_hist <= macd_hist_past: return False # MACD histogram must be expanding
         
         # 5. Volume Surge
-        if current_vol < (avg_vol * VOL_SURGE_MULTIPLIER): return False
+        if current_vol < (avg_vol * vol_surge): return False
         
         # 6. Volatility Check
-        if atr_val <= 0 or (atr_val / current_price) < MIN_VOLATILITY_PCT: return False
+        if atr_val <= 0 or (atr_val / current_price) < min_vol_pct: return False
         
         return True
     except Exception:

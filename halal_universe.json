@@ -95,10 +95,6 @@
         "compliant": true,
         "reason": "Fully compliant"
     },
-    "INTC": {
-        "compliant": true,
-        "reason": "Fully compliant"
-    },
     "CSCO": {
         "compliant": true,
         "reason": "Fully compliant"
@@ -110,5 +106,61 @@
     "UBER": {
         "compliant": true,
         "reason": "Fully compliant"
+    },
+    "NVDA": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "AAPL": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "TSM": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "AVGO": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "TSLA": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "MU": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "LLY": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "ASML": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "V": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "XOM": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "JNJ": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "LRCX": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "AMAT": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
+    },
+    "MA": {
+        "compliant": true,
+        "reason": "Musaffa Halal rating"
     }
 }
