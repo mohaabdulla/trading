@@ -20,24 +20,24 @@ else:
     print(f"Warning: {cache_path} not found. Run halal_screener.py first.")
 
 # Risk Management
-RISK_PCT = 0.07              # Increased to 7% (optimal point for max total return of 363%)
+RISK_PCT = 0.08              # 8% risk per trade (optimized for max return while reducing drawdown)
 MAX_EXPOSURE_PCT = 1.0       # Max total account exposure
 MIN_TRADE_VALUE = 0.0        # Removed minimum trade value to allow small position sizing
 
 # Stop Loss & Exits
-ATR_STOP_MULTIPLIER = 2.0    # Stop loss distance
-ATR_TARGET_MULTIPLIER = 5.0  # Take profit distance
+ATR_STOP_MULTIPLIER = 2.5    # Wider stop to prevent shakeouts
+ATR_TARGET_MULTIPLIER = 6.0  # Higher target to capture larger trend moves
 MAX_HOLD_DAYS = 12           # Days to hold before time-based exit
-RSI_OVERBOUGHT = 75          # Take profit if RSI > 75
+RSI_OVERBOUGHT = 70          # Take profit earlier on momentum exhaustion
 
 # Entry Filters
 MIN_PRICE = 1.0              # Penny stock filter
-MAX_PRICE = 300.0            # Increased max price to include more liquid names
+MAX_PRICE = 300.0            # Max price filter
 MIN_AVG_VOL = 500_000        # Minimum 20-day average volume
-VOL_SURGE_MULTIPLIER = 1.2   # Current vol >= 1.2x avg vol (Breakout volume)
-RSI_LOWER = 70               # Breakout zone lower bound
-RSI_UPPER = 85               # Breakout zone upper bound
-MIN_VOLATILITY_PCT = 0.02    # Require at least 2% daily ATR
+VOL_SURGE_MULTIPLIER = 1.2   # Breakout volume confirmation (restored)
+RSI_LOWER = 68               # Breakout zone lower bound (restored — this IS the edge)
+RSI_UPPER = 85               # Breakout zone upper bound (restored)
+MIN_VOLATILITY_PCT = 0.015   # Allow slightly less volatile names to generate signals
 
 # Commission Model (IBKR Tiered)
 COMMISSION_PER_SHARE = 0.0035
@@ -101,7 +101,7 @@ def is_buy_signal(row: pd.Series) -> bool:
         # 3. Momentum Breakout Zone
         if not (RSI_LOWER <= rsi_val <= RSI_UPPER): return False
         
-        # 4. MACD Rising
+        # 4. MACD Rising (accelerating momentum)
         macd_hist = float(row['MACDh_12_26_9'])
         macd_hist_past = float(row['MACDh_past'])
         if macd_hist <= macd_hist_past: return False # MACD histogram must be expanding
